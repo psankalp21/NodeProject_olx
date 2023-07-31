@@ -39,7 +39,7 @@ User.init(
     },
     email: {
       type: DataTypes.STRING,
-      primaryKey: true,
+      unique:true
     },
     password: {
       type: DataTypes.STRING,

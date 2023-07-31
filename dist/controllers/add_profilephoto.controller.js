@@ -18,29 +18,33 @@ const storage = multer_1.default.diskStorage({
     },
 });
 const upload = (0, multer_1.default)({ storage });
-const add_photo = (req, res) => {
+const add_photo = async (req, res) => {
     try {
-        upload.single('photo')(req, res, async (err) => {
-            if (err instanceof multer_1.default.MulterError) {
-                return res.status(400).send(err);
-            }
-            else if (err) {
-                return res.status(500).send('Server error.');
-            }
-            if (!req.file) {
-                return res.status(400).send('No photo uploaded.');
-            }
-            const { filename, size } = req.file;
-            console.log('Uploaded photo:', filename);
-            console.log('Size:', size);
-            const toBlob = new profile_photo_services_1.default();
-            const blob = toBlob.addPhoto(filename);
-            return res.status(200).send(`Photo uploaded successfully... blob is ${blob}`);
+        const fileUpload = await new Promise((resolve, reject) => {
+            upload.single('photo')(req, res, (err) => {
+                if (err instanceof multer_1.default.MulterError) {
+                    return reject(err);
+                }
+                else if (err) {
+                    return reject(err);
+                }
+                resolve({ filename: req.file?.filename || '', size: req.file?.size || 0 });
+            });
         });
+        if (!fileUpload.filename) {
+            return res.status(400).send('No photo uploaded.');
+        }
+        const { filename, size } = fileUpload;
+        console.log('Uploaded photo:', filename);
+        console.log('Size:', size);
+        const toBlob = new profile_photo_services_1.default();
+        const blob = await toBlob.addPhoto(filename);
+        console.log(blob);
+        return res.status(200).send(blob);
     }
     catch (error) {
         console.error(error);
-        return res.status(500).send('some error occured');
+        return res.status(500).send('Some error occurred');
     }
 };
 exports.add_photo = add_photo;

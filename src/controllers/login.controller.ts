@@ -6,11 +6,10 @@ export default async function login(req: Request, res: Response) {
     const { email, password } = req.body;
     const login = new loginService();
     const user = await login.login(email, password);
-    console.log("user is ", user);
     if (!user) {
       res.send("Invalid credentials");
     } else {
-      res.send("Success");
+      res.send(user);
     }
   } catch (error) {
     console.error(error);

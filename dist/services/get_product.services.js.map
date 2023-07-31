@@ -1,0 +1,1 @@
+{"version":3,"file":"get_product.services.js","sourceRoot":"","sources":["../../src/services/get_product.services.ts"],"names":[],"mappings":";;AAAA,+DAA2D;AAE3D,MAAM,YAAY;IAChB,KAAK,CAAC,UAAU;QACd,MAAM,GAAG,GAAG,MAAM,IAAA,8BAAa,GAAE,CAAC;QAClC,IAAG,CAAC,GAAG,EACP;YACI,OAAO,IAAI,CAAA;SACd;aAED;YACI,OAAO,GAAG,CAAA;SACb;IACH,CAAC;CACF;AAED,kBAAe,YAAY,CAAC"}

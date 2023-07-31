@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProfile = exports.updatePassword = exports.login = exports.add = exports.ifProfileExists = void 0;
+exports.addPhoto = exports.delete_Profile = exports.getProfile = exports.updatePassword = exports.login = exports.add = exports.ifProfileExists = void 0;
 const user_model_1 = require("../database/models/user.model");
 async function ifProfileExists(email) {
     const user = await user_model_1.User.findOne({ where: { email } });
@@ -9,14 +9,21 @@ async function ifProfileExists(email) {
 }
 exports.ifProfileExists = ifProfileExists;
 async function add(name, email, password, dob, phone, gender) {
-    await user_model_1.User.create({
-        name: name,
-        email: email,
-        password: password,
-        dob: dob,
-        phone: phone,
-        gender: gender
-    });
+    try {
+        const user = await user_model_1.User.create({
+            name,
+            email,
+            password,
+            dob,
+            phone,
+            gender,
+        });
+        return user;
+    }
+    catch (error) {
+        console.error(error);
+        throw new Error("Failed to create user");
+    }
 }
 exports.add = add;
 async function login(email, password) {
@@ -49,7 +56,7 @@ exports.updatePassword = updatePassword;
 async function getProfile(email) {
     try {
         const user = await user_model_1.User.findOne({ where: { email: email } });
-        console.log(`user --- ${user}`);
+        console.log(`found user  --- ${user}`);
         return user;
     }
     catch (error) {
@@ -58,4 +65,36 @@ async function getProfile(email) {
     }
 }
 exports.getProfile = getProfile;
+async function delete_Profile(email) {
+    try {
+        const user = await user_model_1.User.findOne({ where: { email } });
+        if (user) {
+            await user.destroy();
+            console.log(`deleting user --- ${user}`);
+            return user;
+        }
+        else
+            return null;
+    }
+    catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+exports.delete_Profile = delete_Profile;
+async function addPhoto(photo) {
+    try {
+        const user = await user_model_1.User.findOne({ where: { uid: 12 } });
+        if (user) {
+            user.profile = photo;
+            await user.save();
+        }
+        return user;
+    }
+    catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+exports.addPhoto = addPhoto;
 //# sourceMappingURL=user.entity.js.map
